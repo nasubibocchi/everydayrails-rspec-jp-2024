@@ -47,6 +47,11 @@ RSpec.describe Project, type: :model do
     expect(other_project).to be_valid
   end
 
+  it "have many notes" do
+    project = FactoryBot.create(:project, :with_notes)
+    expect(project.notes.length).to eq(5)
+  end
+
   describe "date status" do
     it 'is late when due date is in the past today' do
       project = FactoryBot.create(:project, :due_yesterday)
