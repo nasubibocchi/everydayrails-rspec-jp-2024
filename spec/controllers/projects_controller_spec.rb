@@ -68,17 +68,36 @@ RSpec.describe ProjectsController, type: :controller do
         @user = FactoryBot.create(:user)
       end
 
-      it "adds a project" do
-        project_params = FactoryBot.attributes_for(:project)
-        sign_in @user
-        expect {
+      context "with valid parameters" do
+        it "adds a project" do
+          project_params = FactoryBot.attributes_for(:project)
+          sign_in @user
+          expect {
+            post :create, params: { project: project_params }
+          }.to change(@user.projects, :count).by(1)
+        end
+      end
+      
+      context "with invalid parameters" do
+        it "does not add a project" do
+          project_params = FactoryBot.attributes_for(:project, :invalid)
+          sign_in @user
+          expect {
+            post :create, params: { project: project_params }
+          }.not_to change(@user.projects, :count)
+        end
+
+        it "responds with unprocessable entity" do
+          project_params = FactoryBot.attributes_for(:project, :invalid)
+          sign_in @user
           post :create, params: { project: project_params }
-        }.to change(@user.projects, :count).by(1)
+          expect(response).to have_http_status "422"
+        end
       end
     end
 
     context "as a guest" do
-      it "returns a 302 respo;nse" do
+      it "returns a 302 response" do
         project_params = FactoryBot.attributes_for(:project)
         post :create, params: { project: project_params }
         expect(response).to have_http_status "302"
