@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe "Projects", type: :system do
-  before do
-    driven_by(:rack_test)
-  end
-
   # scenarioはitで書き換えることができる
   scenario "user creates a new project" do
     # arrangement
