@@ -3,7 +3,6 @@ class Api::UsersController < ApplicationController
   before_action :authenticate_app, only: :index
 
   def index
-    puts "Before actions: #{self.class._process_action_callbacks}"
     @users = User.order(:updated_at).limit(5)
     render json: @users 
   end
